@@ -1,0 +1,58 @@
+{% extends 'products/base.html' %}
+{% block title %}Edit Product{% endblock %}
+{% block content %}
+    <h1>Edit Product</h1>
+    <form id="update-product-form">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ product.name }}" required>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description">{{ product.description }}</textarea>
+        </div>
+        <div>
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" step="0.01" value="{{ product.price }}" required>
+        </div>
+        <div>
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" name="brand" value="{{ product.brand }}" required>
+        </div>
+        <div>
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" value="{{ product.quantity }}" required>
+        </div>
+        <button type="submit">Update Product</button>
+    </form>
+    <p><a href="{% url 'product_detail' product.id %}">Back to Product Details</a></p>
+
+    <script>
+        document.getElementById('update-product-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const productData = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(`/api/product/${'{{ product.id }}'}/update/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+                    },
+                    body: JSON.stringify(productData),
+                });
+
+                if (response.ok) {
+                    window.location.href = `/product/${'{{ product.id }}'}/`; // Redirect to details on success
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error updating product: ${errorData.error || 'Something went wrong'}`);
+                }
+            } catch (error) {
+                console.error('Error updating product:', error);
+                alert('Failed to update product. Please try again.');
+            }
+        });
+    </script>
+{% endblock %}

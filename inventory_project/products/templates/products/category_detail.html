@@ -1,0 +1,20 @@
+{% extends 'products/base.html' %}
+
+{% block title %}{{ category.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ category.title }}</h1>
+    <p>{{ category.description }}</p>
+
+    <h2>Products in this Category:</h2>
+    <ul>
+        {% for product in products %}
+            <li><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a> - ${{ product.price }}</li>
+        {% empty %}
+            <li>No products in this category.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'category_update' category.id %}">Edit Category</a></p>
+    <p><a href="{% url 'category_delete' category.id %}">Delete Category</a></p>
+    <a href="{% url 'category_list' %}">Back to Category List</a>
+{% endblock %}

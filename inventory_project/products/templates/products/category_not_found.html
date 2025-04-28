@@ -1,0 +1,9 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Category Not Found{% endblock %}
+
+{% block content %}
+    <h1>Category Not Found</h1>
+    <p>The category with ID {{ category_id }} was not found.</p>
+    <a href="{% url 'category_list' %}">Back to Category List</a>
+{% endblock %}

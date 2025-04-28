@@ -1,0 +1,17 @@
+body {
+  font-family: sans-serif;
+}
+
+.product-tile {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  width: 300px; /* Example width */
+}
+
+.product-tile h2 {
+  margin-top: 0;
+  color: #333;
+}

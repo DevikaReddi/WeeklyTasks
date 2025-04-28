@@ -1,0 +1,9 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Product Not Found{% endblock %}
+
+{% block content %}
+    <h1>Product Not Found</h1>
+    <p>The product with ID {{ product_id }} was not found.</p>
+    <p>Please check the URL or go back to the <a href="{% url 'product_list' %}">product list</a>.</p>
+{% endblock %}

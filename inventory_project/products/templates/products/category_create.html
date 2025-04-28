@@ -1,0 +1,46 @@
+{% extends 'products/base.html' %}
+{% block title %}Create New Category{% endblock %}
+{% block content %}
+    <h1>Create New Category</h1>
+    <form id="create-category-form">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <button type="submit">Create Category</button>
+    </form>
+    <p><a href="{% url 'category_list' %}">Back to Category List</a></p>
+
+    <script>
+        document.getElementById('create-category-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const categoryData = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/api/category/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+                    },
+                    body: JSON.stringify(categoryData),
+                });
+
+                if (response.ok) {
+                    window.location.href = '/categories/'; // Redirect to category list on success
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error creating category: ${errorData.error || 'Something went wrong'}`);
+                }
+            } catch (error) {
+                console.error('Error creating category:', error);
+                alert('Failed to create category. Please try again.');
+            }
+        });
+    </script>
+{% endblock %}

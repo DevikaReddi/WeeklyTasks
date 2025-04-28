@@ -1,0 +1,72 @@
+{% extends 'products/base.html' %}
+{% block title %}Create New Product{% endblock %}
+{% block content %}
+    <h1>Create New Product</h1>
+    <form id="create-product-form">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <div>
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+        </div>
+        <div>
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" name="brand" required>
+        </div>
+        <div>
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required>
+        </div>
+        <div>
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="">-- Select Category --</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="new_category">Add New Category (Optional):</label>
+            <input type="text" id="new_category" name="new_category">
+            <small>If you enter a new category here, it will be sent with the product data.</small>
+        </div>
+        <button type="submit">Create Product</button>
+    </form>
+    <p><a href="{% url 'product_list' %}">Back to Product List</a></p>
+
+    <script>
+        document.getElementById('create-product-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const productData = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/api/product/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+                    },
+                    body: JSON.stringify(productData),
+                });
+
+                if (response.ok) {
+                    window.location.href = '/products/'; // Redirect to product list on success
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error creating product: ${errorData.error || 'Something went wrong'}`);
+                }
+            } catch (error) {
+                console.error('Error creating product:', error);
+                alert('Failed to create product. Please try again.');
+            }
+        });
+    </script>
+{% endblock %}
