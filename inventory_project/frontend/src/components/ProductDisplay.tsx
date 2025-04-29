@@ -1,5 +1,5 @@
 import React from 'react';
-import { Product } from '../types'; // Import the Product type
+import { Product } from '../types';
 
 interface ProductDisplayProps {
   product: Product;
@@ -7,13 +7,25 @@ interface ProductDisplayProps {
 
 const ProductDisplay: React.FC<ProductDisplayProps> = ({ product }) => {
   return (
-    // Basic styling - feel free to improve!
-    <div style={{ border: '1px solid #eee', margin: '8px', padding: '8px', borderRadius: '4px' }}>
-      <h4>{product.name}</h4>
-      <p>Brand: {product.brand}</p>
-      <p>Price: ${product.price.toFixed(2)}</p>
-      <p>Quantity: {product.quantity}</p>
-      {product.category && <p><small>Category: {product.category}</small></p>}
+    <div className="product-card">
+      <div className="product-image">
+        {/* Placeholder image based on product category */}
+        <div className="placeholder-img">
+          {product.category === 'Electronics' ? '💻' : 
+           product.category === 'Accessories' ? '🎧' : '📦'}
+        </div>
+      </div>
+      <div className="product-info">
+        <h3 className="product-name">{product.name}</h3>
+        <div className="product-meta">
+          <span className="product-brand">{product.brand}</span>
+          {product.category && <span className="product-category">{product.category}</span>}
+        </div>
+        <div className="product-details">
+          <div className="product-price">${product.price.toFixed(2)}</div>
+          <div className="product-quantity">Stock: {product.quantity}</div>
+        </div>
+      </div>
     </div>
   );
 };
