@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import ProductList from './components/ProductList';
+import ProductEditPage from './components/ProductEditPage';
 import { Product } from './types';
 import './App.css';
 
-// Create Dummy Data matching your Product interface
-// Use placeholder IDs similar to MongoDB ObjectIDs
 const dummyProducts: Product[] = [
   { _id: {$oid: "66300a1b1234567890abcdef"}, name: 'Super Laptop', description: 'A very fast laptop indeed. Perfect for developers.', price: 1500.00, brand: 'LapTopCorp', quantity: 10, category: 'Electronics', created_at: '2025-04-28T10:00:00Z' },
   { _id: {$oid: "66300a1b1234567890abcde0"}, name: 'Clicky Keyboard', description: 'Loud mechanical keyboard with RGB.', price: 85.50, brand: 'KeyMasters', quantity: 50, category: 'Accessories', created_at: '2025-04-29T11:30:00Z' },
@@ -16,18 +16,36 @@ const dummyProducts: Product[] = [
 ];
 
 function App() {
-  return (
-    <div className="app-container">
-      <Header />
-      <main className="main-content">
-        <ProductList products={dummyProducts} />
-      </main>
-      <footer className="app-footer">
-        <div className="footer-content">
-          <p>&copy; 2025 Inventory Management System</p>
-        </div>
-      </footer>
-    </div>
+  const [products, setProducts] = useState<Product[]>(dummyProducts);
+
+   return (
+    <Router>
+      <div className="app-container">
+        <Header />
+        <main className="main-content">
+          <Routes>
+            <Route
+              path="/"
+              element={<ProductList products={products} setProducts={setProducts} />}
+            />
+            <Route
+              path="/product/:id"
+              element={
+                <ProductEditPage
+                  products={products}
+                  setProducts={setProducts}
+                />
+              }
+            />
+          </Routes>
+        </main>
+        <footer className="app-footer">
+          <div className="footer-content">
+            <p>&copy; 2025 Inventory Management System</p>
+          </div>
+        </footer>
+      </div>
+    </Router>
   );
 }
 

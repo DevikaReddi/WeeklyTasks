@@ -21,3 +21,16 @@ export interface ObjectId {
     created_at?: string; // Dates are often strings in JSON
     updated_at?: string;
   }
+
+export interface ApiResponse<T> {
+  data?: T;
+  error?: string;
+  success: boolean;
+}
+
+export enum LoadingStatus {
+  IDLE = 'idle',
+  LOADING = 'loading',
+  SUCCESS = 'success',
+  ERROR = 'error'
+}
